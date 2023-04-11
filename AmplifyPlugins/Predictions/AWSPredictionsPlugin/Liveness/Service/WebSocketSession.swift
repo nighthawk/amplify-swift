@@ -8,8 +8,8 @@
 import Foundation
 
 final class WebSocketSession {
+    let session: URLSession
     private let urlSessionWebSocketDelegate: Delegate
-    private let session: URLSession
     private var task: URLSessionWebSocketTask?
     private var receiveMessage: ((Result<URLSessionWebSocketTask.Message, Error>) -> Bool)?
     private var onSocketClosed: ((URLSessionWebSocketTask.CloseCode) -> Void)?
@@ -50,6 +50,7 @@ final class WebSocketSession {
 
     func close(with code: URLSessionWebSocketTask.CloseCode, reason: Data = .init()) {
         task?.cancel(with: code, reason: reason)
+        session.finishTasksAndInvalidate()
     }
 
     func send(

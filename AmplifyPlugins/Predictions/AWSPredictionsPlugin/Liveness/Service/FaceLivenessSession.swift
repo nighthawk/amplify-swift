@@ -103,6 +103,10 @@ public final class FaceLivenessSession: LivenessService {
         )
     }
 
+    public func invalidateSession() {
+        websocket.session.invalidateAndCancel()
+    }
+
     private func fallbackDecoding(_ message: EventStream.Message) -> Bool {
         // We only care about two events above.
         // Just in case the header value changes (it shouldn't)
@@ -137,6 +141,7 @@ public final class FaceLivenessSession: LivenessService {
                 case "DisconnectionEvent":
                     // :event-type DisconnectionEvent
                     onComplete(.disconnectionEvent)
+                    websocket.session.invalidateAndCancel()
                     return false
                 default:
                     return true

@@ -23,5 +23,7 @@ public protocol LivenessService {
         listener: @escaping (FaceLivenessSession.SessionConfiguration) -> Void,
         on event: LivenessEventKind.Server
     )
+
+    func invalidateSession()
 }
 
