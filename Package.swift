@@ -348,7 +348,7 @@ let predictionsTargets: [Target] = [
     ),
     .testTarget(
         name: "AWSPredictionsPluginDocumentationTests",
-        dependencies: [.target(name: "Amplify")],
+        dependencies: [.target(name: "Amplify"), "AWSPredictionsPlugin"],
         path: "AmplifyPlugins/Predictions/Tests/AWSPredictionsPluginDocumentationTests"
     ),
     .target(
