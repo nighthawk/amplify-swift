@@ -9,34 +9,9 @@ import XCTest
 import Amplify
 import Combine
 
-final class LabelObjectsInImageTestCase: XCTestCase {
-    let authPlugin = AuthPlugin()
-    let predictionsPlugin = PredictionsPlugin()
-
-    func test_configure() {
-        do {
-            try Amplify.add(plugin: AuthPlugin())
-            try Amplify.add(plugin: PredictionsPlugin())
-            try Amplify.configure()
-            print("Amplify configured with Auth and Predictions plugins")
-        } catch {
-            print("Failed to initialize Amplify with \(error)")
-        }
-    }
-
+final class LabelObjectsInImageTestCase: PredictionsDocumentationBaseTestCase {
     override func setUp() {
-        do {
-            try Amplify.add(plugin: authPlugin)
-            try Amplify.add(plugin: predictionsPlugin)
-            let authConfiguration = AuthCategoryConfiguration(plugins: [:])
-            let predictionsConfiguration = PredictionsCategoryConfiguration(plugins: [:])
-            let configuration = AmplifyConfiguration(auth: authConfiguration, predictions: predictionsConfiguration)
-            try Amplify.configure(configuration)
-            print("Amplify configured with Auth and Predictions plugins")
-        } catch {
-            print("Failed to initialize Amplify with \(error)")
-        }
-
+        super.setUp()
         predictionsPlugin._detectLabels = .init { _, _ in
             .init(labels: [])
         }
@@ -107,7 +82,9 @@ final class LabelObjectsInImageTestCase: XCTestCase {
             })
         }
         // #-----------#
-
+        predictionsPlugin._detectLabels = .init { _, _ in
+            .init(labels: [])
+        }
         _ = detectLabels(URL(string: "foo.bar")!)
         _ = detectAllLabels(URL(string: "foo.bar")!)
     }

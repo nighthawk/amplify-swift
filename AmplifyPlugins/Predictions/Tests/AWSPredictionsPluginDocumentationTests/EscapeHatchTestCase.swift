@@ -9,6 +9,7 @@ import XCTest
 import Amplify
 import AWSPredictionsPlugin
 import AWSRekognition
+@testable import Amplify
 
 final class PredictionsEscapeHatchTestCase: XCTestCase {
     let authPlugin = AuthPlugin()
@@ -26,6 +27,10 @@ final class PredictionsEscapeHatchTestCase: XCTestCase {
         } catch {
             print("Failed to initialize Amplify with \(error)")
         }
+    }
+
+    override func tearDown() async throws {
+        await Amplify.reset()
     }
 
     func test_escapeHatchRekognition() async throws {

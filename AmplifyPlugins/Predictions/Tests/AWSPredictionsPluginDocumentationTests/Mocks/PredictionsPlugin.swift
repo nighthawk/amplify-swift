@@ -10,7 +10,6 @@ import Amplify
 @_spi(PredictionsConvertRequestKind) import Amplify
 @_spi(PredictionsIdentifyRequestKind) import Amplify
 
-
 class PredictionsPlugin: PredictionsCategoryPlugin {
     var key: PluginKey
 
@@ -150,7 +149,5 @@ class PredictionsPlugin: PredictionsCategoryPlugin {
         }
     }
 
-    func reset() async {
-        fatalError()
-    }
+    func reset() async {}
 }

@@ -11,26 +11,9 @@ import Combine
 import AVFoundation
 import AWSPredictionsPlugin
 
-final class PredictionsTextToSpeechTestCase: XCTestCase {
-    let authPlugin = AuthPlugin()
-    let predictionsPlugin = PredictionsPlugin()
-
+final class PredictionsTextToSpeechTestCase: PredictionsDocumentationBaseTestCase {
     var player: AVAudioPlayer?
     var textToSpeechSink: AnyCancellable?
-
-    override func setUp() {
-        do {
-            try Amplify.add(plugin: authPlugin)
-            try Amplify.add(plugin: predictionsPlugin)
-            let authConfiguration = AuthCategoryConfiguration(plugins: [:])
-            let predictionsConfiguration = PredictionsCategoryConfiguration(plugins: [:])
-            let configuration = AmplifyConfiguration(auth: authConfiguration, predictions: predictionsConfiguration)
-            try Amplify.configure(configuration)
-            print("Amplify configured with Auth and Predictions plugins")
-        } catch {
-            print("Failed to initialize Amplify with \(error)")
-        }
-    }
 
     func test_textToSpeech() async throws {
         // #-----# text_to_speech #-----#

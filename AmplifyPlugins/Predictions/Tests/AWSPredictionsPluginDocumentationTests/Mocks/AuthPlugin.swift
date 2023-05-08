@@ -144,5 +144,5 @@ class AuthPlugin: AuthCategoryPlugin {
         options: AuthRememberDeviceRequest.Options?
     ) async throws { fatalError() }
 
-    func reset() async { fatalError() }
+    func reset() async {}
 }
