@@ -346,6 +346,11 @@ let predictionsTargets: [Target] = [
         path: "AmplifyPlugins/Predictions/Tests/AWSPredictionsPluginUnitTests",
         resources: [.copy("TestResources/TestImages") ]
     ),
+    .testTarget(
+        name: "AWSPredictionsPluginDocumentationTests",
+        dependencies: [.target(name: "Amplify")],
+        path: "AmplifyPlugins/Predictions/Tests/AWSPredictionsPluginDocumentationTests"
+    ),
     .target(
         name: "CoreMLPredictionsPlugin",
         dependencies: [

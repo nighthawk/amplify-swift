@@ -579,6 +579,16 @@
                </Test>
             </SkippedTests>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AWSPredictionsPluginDocumentationTests"
+               BuildableName = "AWSPredictionsPluginDocumentationTests"
+               BlueprintName = "AWSPredictionsPluginDocumentationTests"
+               ReferencedContainer = "container:">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
