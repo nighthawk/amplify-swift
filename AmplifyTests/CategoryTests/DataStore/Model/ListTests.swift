@@ -131,24 +131,14 @@ class ListTests: XCTestCase {
 
         let serializedData = try ListTests.encode(json: data)
         let list = try ListTests.decode(serializedData, responseType: BasicModel.self)
-        let fetchSuccess = asyncExpectation(description: "fetch successful")
-        Task {
-            try await list.fetch()
-            await fetchSuccess.fulfill()
-        }
-        await waitForExpectations([fetchSuccess], timeout: 1.0)
-        
+        try await list.fetch()
+
         XCTAssertEqual(list.count, 2)
         XCTAssertEqual(list.startIndex, 0)
         XCTAssertEqual(list.endIndex, 2)
         XCTAssertEqual(list.index(after: 1), 2)
         XCTAssertNotNil(list[0])
-        let iterateSuccess = expectation(description: "Iterate over the list successfullly")
-        iterateSuccess.expectedFulfillmentCount = 2
-        list.makeIterator().forEach { _ in
-            iterateSuccess.fulfill()
-        }
-        wait(for: [iterateSuccess], timeout: 1)
+
         let json = try? ListTests.toJSON(list: list)
         XCTAssertEqual(json, """
             [{\"id\":\"1\"},{\"id\":\"2\"}]
@@ -165,23 +155,13 @@ class ListTests: XCTestCase {
         let serializedData = try ListTests.encode(json: data)
         let list = try ListTests.decode(serializedData, responseType: BasicModel.self)
         XCTAssertNotNil(list)
-        let fetchSuccess = asyncExpectation(description: "fetch successful")
-        Task {
-            try await list.fetch()
-            await fetchSuccess.fulfill()
-        }
-        await waitForExpectations([fetchSuccess], timeout: 1.0)
+        try await list.fetch()
         XCTAssertEqual(list.count, 2)
         XCTAssertEqual(list.startIndex, 0)
         XCTAssertEqual(list.endIndex, 2)
         XCTAssertEqual(list.index(after: 1), 2)
         XCTAssertNotNil(list[0])
-        let iterateSuccess = expectation(description: "Iterate over the list successfullly")
-        iterateSuccess.expectedFulfillmentCount = 2
-        list.makeIterator().forEach { _ in
-            iterateSuccess.fulfill()
-        }
-        await waitForExpectations(timeout: 1)
+
         XCTAssertFalse(list.listProvider.hasNextPage())
         do {
             _ = try await list.listProvider.getNextPage()

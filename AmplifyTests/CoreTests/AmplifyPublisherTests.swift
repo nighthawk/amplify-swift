@@ -185,7 +185,7 @@ class AmplifyPublisherTests: XCTestCase {
 
         send(input: input, throwingSequence: sequence)
 
-        await waitForExpectations(timeout: 1)
+        await fulfillment(of: [finished], timeout: 1)
         XCTAssertEqual(input, output)
         sink.cancel()
     }
@@ -208,7 +208,8 @@ class AmplifyPublisherTests: XCTestCase {
                 output.append(value)
             }
 
-        await waitForExpectations(timeout: 3)
+        await fulfillment(of: [finished], timeout: 3)
+
         for element in output {
             XCTAssertTrue(expected.contains(element))
         }
@@ -234,7 +235,7 @@ class AmplifyPublisherTests: XCTestCase {
                 output.append(value)
             }
 
-        await waitForExpectations(timeout: 3)
+        await fulfillment(of: [failed], timeout: 3)
         for element in output {
             XCTAssertTrue(expected.contains(element))
         }
@@ -260,7 +261,7 @@ class AmplifyPublisherTests: XCTestCase {
 
         send(input: input, sequence: sequence)
 
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [completed], timeout: 0.1)
         XCTAssertEqual(expected, output)
     }
     
@@ -268,15 +269,13 @@ class AmplifyPublisherTests: XCTestCase {
         let expected = [Int]()
         let sequence = AmplifyAsyncSequence<Int>()
         var output = [Int]()
-        let finished = asyncExpectation(description: "completion finished")
+        let finished = expectation(description: "completion finished")
 
         let sink = Amplify.Publisher.create(sequence)
             .sink { completion in
                 switch completion {
                 case .finished:
-                    Task {
-                        await finished.fulfill()
-                    }
+                    finished.fulfill()
                 case .failure(let error):
                     XCTFail("Failed with error: \(error)")
                 }
@@ -286,7 +285,7 @@ class AmplifyPublisherTests: XCTestCase {
 
         sequence.cancel()
 
-        await waitForExpectations([finished])
+        await fulfillment(of: [finished], timeout: 1)
         XCTAssertEqual(expected, output)
         sink.cancel()
     }

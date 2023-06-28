@@ -110,7 +110,7 @@ class AWSGraphQLSubscriptionOperationCancelTests: XCTestCase {
             valueListener: valueListener,
             completionListener: completionListener
         )
-        await waitForExpectations(timeout: 5)
+        await fulfillment(of: [receivedValueConnecting], timeout: 5)
         
         let receivedCompletion = expectation(description: "Received completion")
         let receivedFailure = expectation(description: "Received failure")
@@ -145,7 +145,10 @@ class AWSGraphQLSubscriptionOperationCancelTests: XCTestCase {
         
         operation.cancel()
         XCTAssert(operation.isCancelled)
-        await waitForExpectations(timeout: 5)
+        await fulfillment(
+            of: [receivedCompletion, receivedFailure, receivedValueConnecting, receivedValueDisconnected],
+            timeout: 5
+        )
     }
     
     func testFailureOnConnection() async {
@@ -184,7 +187,7 @@ class AWSGraphQLSubscriptionOperationCancelTests: XCTestCase {
             valueListener: valueListener,
             completionListener: completionListener
         )
-        await waitForExpectations(timeout: 0.3)
+        await fulfillment(of: [receivedCompletion, receivedFailure, receivedValue], timeout: 5)
         XCTAssert(operation.isFinished)
     }
 
@@ -221,7 +224,8 @@ class AWSGraphQLSubscriptionOperationCancelTests: XCTestCase {
             valueListener: valueListener,
             completionListener: nil
         )
-        await waitForExpectations(timeout: 5)
+        await fulfillment(of: [receivedValue], timeout: 5)
+
         let receivedFailure = expectation(description: "Received failure")
         receivedFailure.isInverted = true
         let receivedCompletion = expectation(description: "Received completion")
@@ -237,6 +241,6 @@ class AWSGraphQLSubscriptionOperationCancelTests: XCTestCase {
         
         operation.cancel()
         XCTAssert(operation.isCancelled)
-        await waitForExpectations(timeout: 5)
+        await fulfillment(of: [receivedFailure, receivedCompletion], timeout: 5)
     }
 }

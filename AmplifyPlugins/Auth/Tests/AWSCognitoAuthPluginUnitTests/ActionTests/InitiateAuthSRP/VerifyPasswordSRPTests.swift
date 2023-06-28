@@ -47,7 +47,7 @@ class VerifyPasswordSRPTests: XCTestCase {
             environment: environment
         )
 
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [verifyPasswordInvoked], timeout: 0.1)
     }
 
     /// Test empty response is returned by Cognito proper error is thrown
@@ -95,7 +95,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test invalid challenge response from initiate auth
@@ -143,7 +143,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  challenge response with no salt from initiate auth
@@ -191,7 +191,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  challenge response with no secretblock from initiate auth
@@ -239,7 +239,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  challenge response with no SRPB from initiate auth
@@ -287,7 +287,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  an exception from the SRP calculation
@@ -335,7 +335,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifyPasswordSRP
@@ -378,7 +378,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifyPasswordSRP
@@ -425,7 +425,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test verify password retry on device not found
@@ -473,7 +473,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifyPasswordSRP for confirmDevice
@@ -516,7 +516,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierCompletion], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifyPasswordSRP for verifyDevice
@@ -559,7 +559,7 @@ class VerifyPasswordSRPTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierCompletion], timeout: 0.1)
     }
 
 }

@@ -53,7 +53,7 @@ class VerifySignInChallengeTests: XCTestCase {
             environment: environment
         )
 
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [verifyPasswordInvoked], timeout: 0.1)
     }
 
     /// Test empty response is returned by Cognito proper error is thrown
@@ -100,7 +100,7 @@ class VerifySignInChallengeTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifySignInChallenge
@@ -141,7 +141,7 @@ class VerifySignInChallengeTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [verifyChallengeComplete], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifySignInChallenge
@@ -187,7 +187,7 @@ class VerifySignInChallengeTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test verify password retry on device not found
@@ -233,7 +233,7 @@ class VerifySignInChallengeTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [passwordVerifierError], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifySignInChallenge for confirmDevice
@@ -274,7 +274,7 @@ class VerifySignInChallengeTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [verifyChallengeComplete], timeout: 0.1)
     }
 
     /// Test  successful response from the VerifySignInChallenge for verify device
@@ -315,6 +315,6 @@ class VerifySignInChallengeTests: XCTestCase {
         }
 
         await action.execute(withDispatcher: dispatcher, environment: environment)
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [verifyChallengeComplete], timeout: 0.1)
     }
 }

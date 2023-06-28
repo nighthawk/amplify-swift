@@ -63,10 +63,10 @@ class PredictionsCategoryConfigurationTests: XCTestCase {
     ///
     func testCanResetPlugin() async throws {
         let plugin = MockPredictionsCategoryPlugin()
-        let resetWasInvoked = expectation(description: "reset() was invoked")
+        var resetWasInvoked = false
         plugin.listeners.append { message in
             if message == "reset" {
-                resetWasInvoked.fulfill()
+                resetWasInvoked = true
             }
         }
         try Amplify.add(plugin: plugin)
@@ -76,10 +76,10 @@ class PredictionsCategoryConfigurationTests: XCTestCase {
         )
 
         let amplifyConfig = AmplifyConfiguration(predictions: config)
-
         try Amplify.configure(amplifyConfig)
         await Amplify.reset()
-        await waitForExpectations(timeout: 1.0)
+
+        XCTAssertTrue(resetWasInvoked)
     }
 
     /// Test whether calling reset removes the plugin added

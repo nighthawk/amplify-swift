@@ -103,7 +103,7 @@ class AWSAuthHostedUISignInTests: XCTestCase {
             }
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: networkTimeout)
+        await fulfillment(of: [expectation], timeout: networkTimeout)
     }
 
     @MainActor
@@ -122,7 +122,7 @@ class AWSAuthHostedUISignInTests: XCTestCase {
             errorExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: networkTimeout)
+        await fulfillment(of: [errorExpectation], timeout: networkTimeout)
         mockHostedUIResult = .success([
             .init(name: "state", value: mockState),
             .init(name: "code", value: mockProof)
@@ -135,7 +135,7 @@ class AWSAuthHostedUISignInTests: XCTestCase {
         } catch {
             XCTFail("Should not fail with error = \(error)")
         }
-        waitForExpectations(timeout: networkTimeout)
+        await fulfillment(of: [signInExpectation], timeout: networkTimeout)
     }
 
     @MainActor
@@ -155,7 +155,7 @@ class AWSAuthHostedUISignInTests: XCTestCase {
             }
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: networkTimeout)
+        await fulfillment(of: [expectation], timeout: networkTimeout)
     }
 
     @MainActor
@@ -172,7 +172,7 @@ class AWSAuthHostedUISignInTests: XCTestCase {
             }
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: networkTimeout)
+        await fulfillment(of: [expectation], timeout: networkTimeout)
     }
 
     @MainActor
@@ -200,7 +200,7 @@ class AWSAuthHostedUISignInTests: XCTestCase {
             }
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: networkTimeout)
+        await fulfillment(of: [expectation], timeout: networkTimeout)
     }
 
     @MainActor
@@ -228,7 +228,7 @@ class AWSAuthHostedUISignInTests: XCTestCase {
             }
             expectation.fulfill()
         }
-        wait(for: [expectation], timeout: networkTimeout)
+        await fulfillment(of: [expectation], timeout: networkTimeout)
     }
 
 

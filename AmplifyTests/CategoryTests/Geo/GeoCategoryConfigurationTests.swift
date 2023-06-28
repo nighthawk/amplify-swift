@@ -38,10 +38,10 @@ class GeoCategoryConfigurationTests: XCTestCase {
 
     func testCanResetGeoPlugin() async throws {
         let plugin = MockGeoCategoryPlugin()
-        let resetWasInvoked = expectation(description: "reset() was invoked")
+        var resetWasInvoked = false
         plugin.listeners.append { message in
             if message == "reset" {
-                resetWasInvoked.fulfill()
+                resetWasInvoked = true
             }
         }
         try Amplify.add(plugin: plugin)
@@ -54,7 +54,7 @@ class GeoCategoryConfigurationTests: XCTestCase {
 
         try Amplify.configure(amplifyConfig)
         await Amplify.reset()
-        await waitForExpectations(timeout: 1.0)
+        XCTAssertTrue(resetWasInvoked)
     }
 
     func testResetRemovesAddedPlugin() async throws {

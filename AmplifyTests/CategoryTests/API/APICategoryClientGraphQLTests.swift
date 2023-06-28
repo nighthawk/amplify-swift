@@ -35,14 +35,8 @@ class APICategoryClientGraphQLTests: XCTestCase {
         }
 
         let request = GraphQLRequest(document: "", variables: nil, responseType: JSONValue.self)
-        let queryCompleted = asyncExpectation(description: "query completed")
-        Task {
-            _ = try await Amplify.API.query(request: request)
-            await queryCompleted.fulfill()
-        }
-        await waitForExpectations([queryCompleted], timeout: 0.5)
-        
-        await waitForExpectations(timeout: 0.5)
+        _ = try await Amplify.API.query(request: request)
+        await fulfillment(of: [methodWasInvokedOnPlugin], timeout: 0.5)
     }
 
     func testMutate() async throws {
@@ -55,15 +49,8 @@ class APICategoryClientGraphQLTests: XCTestCase {
         }
 
         let request = GraphQLRequest(document: "", variables: nil, responseType: JSONValue.self)
-        
-        let mutateCompleted = asyncExpectation(description: "mutate completed")
-        Task {
-            _ = try await Amplify.API.mutate(request: request)
-            await mutateCompleted.fulfill()
-        }
-        await waitForExpectations([mutateCompleted], timeout: 0.5)
-
-        await waitForExpectations(timeout: 0.5)
+        _ = try await Amplify.API.mutate(request: request)
+        await fulfillment(of: [methodWasInvokedOnPlugin], timeout: 0.5)
     }
 
     // MARK: - Utilities

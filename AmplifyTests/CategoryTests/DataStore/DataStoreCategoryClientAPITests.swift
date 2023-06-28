@@ -29,22 +29,15 @@ class DataStoreCategoryClientAPITests: XCTestCase {
         try Amplify.add(plugin: plugin)
         try Amplify.configure(mockAmplifyConfig)
 
-        let methodWasInvokedOnPlugin = expectation(description: "method was invoked on plugin")
+        var methodWasInvokedOnPlugin = false
         plugin.listeners.append { message in
             if message == "save" {
-                methodWasInvokedOnPlugin.fulfill()
+                methodWasInvokedOnPlugin = true
             }
         }
 
-        let saveSuccess = asyncExpectation(description: "saved successful")
-        Task {
-            _ = try await Amplify.DataStore.save(TestModel.make())
-            await saveSuccess.fulfill()
-        }
-        await waitForExpectations([saveSuccess], timeout: 0.5)
-        
-
-        await waitForExpectations(timeout: 0.5)
+        _ = try await Amplify.DataStore.save(TestModel.make())
+        XCTAssertTrue(methodWasInvokedOnPlugin)
     }
 
 }

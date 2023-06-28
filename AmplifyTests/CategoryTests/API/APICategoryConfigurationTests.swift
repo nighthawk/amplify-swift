@@ -38,10 +38,10 @@ class APICategoryConfigurationTests: XCTestCase {
 
     func testCanResetAPIPlugin() async throws {
         let plugin = MockAPICategoryPlugin()
-        let resetWasInvoked = expectation(description: "reset() was invoked")
+        var resetWasInvoked = false
         plugin.listeners.append { message in
             if message == "reset" {
-                resetWasInvoked.fulfill()
+                resetWasInvoked = true
             }
         }
         try Amplify.add(plugin: plugin)
@@ -54,7 +54,7 @@ class APICategoryConfigurationTests: XCTestCase {
 
         try Amplify.configure(amplifyConfig)
         await Amplify.reset()
-        await waitForExpectations(timeout: 1.0)
+        XCTAssertTrue(resetWasInvoked)
     }
 
     func testResetRemovesAddedPlugin() async throws {
@@ -102,10 +102,10 @@ class APICategoryConfigurationTests: XCTestCase {
 
     func testCanUseDefaultPluginIfOnlyOnePlugin() async throws {
         let plugin = MockAPICategoryPlugin()
-        let methodInvokedOnDefaultPlugin = expectation(description: "test method invoked on default plugin")
+        var methodInvokedOnDefaultPlugin = false
         plugin.listeners.append { message in
             if message == "get" {
-                methodInvokedOnDefaultPlugin.fulfill()
+                methodInvokedOnDefaultPlugin = true
             }
         }
         try Amplify.add(plugin: plugin)
@@ -114,15 +114,8 @@ class APICategoryConfigurationTests: XCTestCase {
         let amplifyConfig = AmplifyConfiguration(api: apiConfig)
 
         try Amplify.configure(amplifyConfig)
-
-        let getCompleted = asyncExpectation(description: "get completed")
-        Task {
-            _ = try await Amplify.API.get(request: RESTRequest())
-            await getCompleted.fulfill()
-        }
-        await waitForExpectations([getCompleted], timeout: 0.5)
-
-        await waitForExpectations(timeout: 1.0)
+        _ = try await Amplify.API.get(request: RESTRequest())
+        XCTAssertTrue(methodInvokedOnDefaultPlugin)
     }
 
     // TODO: this test is disabled for now since `catchBadInstruction` only takes in closure
@@ -153,22 +146,20 @@ class APICategoryConfigurationTests: XCTestCase {
 
     func testCanUseSpecifiedPlugin() async throws {
         let plugin1 = MockAPICategoryPlugin()
-        let methodShouldNotBeInvokedOnDefaultPlugin =
-            expectation(description: "test method should not be invoked on default plugin")
-        methodShouldNotBeInvokedOnDefaultPlugin.isInverted = true
+        var methodShouldNotBeInvokedOnDefaultPlugin = false
+
         plugin1.listeners.append { message in
             if message == "get" {
-                methodShouldNotBeInvokedOnDefaultPlugin.fulfill()
+                methodShouldNotBeInvokedOnDefaultPlugin = true
             }
         }
         try Amplify.add(plugin: plugin1)
 
         let plugin2 = MockSecondAPICategoryPlugin()
-        let methodShouldBeInvokedOnSecondPlugin =
-            expectation(description: "test method should be invoked on second plugin")
+        var methodShouldBeInvokedOnSecondPlugin = false
         plugin2.listeners.append { message in
             if message == "get" {
-                methodShouldBeInvokedOnSecondPlugin.fulfill()
+                methodShouldBeInvokedOnSecondPlugin = true
             }
         }
         try Amplify.add(plugin: plugin2)
@@ -181,18 +172,13 @@ class APICategoryConfigurationTests: XCTestCase {
         )
 
         let amplifyConfig = AmplifyConfiguration(api: apiConfig)
-
         try Amplify.configure(amplifyConfig)
-        
-        let getCompleted = asyncExpectation(description: "get completed")
-        Task {
-            let plugin = try Amplify.API.getPlugin(for: "MockSecondAPICategoryPlugin")
-            _ = try await plugin.get(request: RESTRequest())
-            await getCompleted.fulfill()
-        }
-        await waitForExpectations([getCompleted], timeout: 0.5)
 
-        await waitForExpectations(timeout: 1.0)
+        let plugin = try Amplify.API.getPlugin(for: "MockSecondAPICategoryPlugin")
+        _ = try await plugin.get(request: RESTRequest())
+
+        XCTAssertTrue(methodShouldBeInvokedOnSecondPlugin)
+        XCTAssertFalse(methodShouldNotBeInvokedOnDefaultPlugin)
     }
 
     func testCanConfigurePluginDirectly() throws {

@@ -69,7 +69,7 @@ class DefaultHubPluginTests: XCTestCase {
         }
 
         plugin.dispatch(to: .storage, payload: HubPayload(eventName: "TEST_EVENT"))
-        await waitForExpectations(timeout: 0.5)
+        await fulfillment(of: [expectedMessageReceived], timeout: 0.5)
     }
 
     /// Given: The default Hub plugin with a registered listener
@@ -92,7 +92,7 @@ class DefaultHubPluginTests: XCTestCase {
         }
 
         plugin.dispatch(to: .storage, payload: HubPayload(eventName: "TEST_EVENT"))
-        await waitForExpectations(timeout: 0.5)
+        await fulfillment(of: [messageReceived], timeout: 0.5)
     }
 
     /// Given: A subscription token from a previous call to the default Hub plugin's `listen` method
@@ -101,7 +101,7 @@ class DefaultHubPluginTests: XCTestCase {
     func testDefaultPluginRemoveListener() async throws {
         let isStillRegistered = AtomicValue(initialValue: true)
         var isStillRegisteredExpected = true
-        var currentExpectation: XCTestExpectation?
+        var currentExpectation = expectation(description: "Message was received as expected")
         let unsubscribeToken = plugin.listen(to: .storage, isIncluded: nil) { hubPayload in
             if isStillRegistered.get() {
                 // Ignore system-generated notifications (e.g., "configuration finished"). After we `removeListener`
@@ -111,16 +111,15 @@ class DefaultHubPluginTests: XCTestCase {
                     return
                 }
                 if isStillRegisteredExpected {
-                    currentExpectation?.fulfill()
+                    currentExpectation.fulfill()
                 }
             } else {
                 if !isStillRegisteredExpected {
-                    currentExpectation?.fulfill()
+                    currentExpectation.fulfill()
                 }
             }
         }
 
-        currentExpectation = expectation(description: "Message was received as expected")
         guard try await HubListenerTestUtilities.waitForListener(with: unsubscribeToken,
                                                               plugin: plugin,
                                                               timeout: 0.5) else {
@@ -129,14 +128,14 @@ class DefaultHubPluginTests: XCTestCase {
         }
 
         plugin.dispatch(to: .storage, payload: HubPayload(eventName: "TEST_EVENT"))
-        await waitForExpectations(timeout: 0.5)
+        await fulfillment(of: [currentExpectation], timeout: 0.5)
 
         plugin.removeListener(unsubscribeToken)
         try? await Task.sleep(seconds: 0.01)
 
         isStillRegisteredExpected = false
         currentExpectation = expectation(description: "Message was received after removing listener")
-        currentExpectation?.isInverted = true
+        currentExpectation.isInverted = true
 
         await isStillRegistered.set(
             try HubListenerTestUtilities.waitForListener(with: unsubscribeToken,
@@ -147,7 +146,7 @@ class DefaultHubPluginTests: XCTestCase {
         XCTAssertFalse(isStillRegistered.get(), "Should not be registered after removeListener")
 
         plugin.dispatch(to: .storage, payload: HubPayload(eventName: "TEST_EVENT"))
-        await waitForExpectations(timeout: 0.5)
+        await fulfillment(of: [currentExpectation], timeout: 0.5)
     }
 
     /// Given: The default Hub plugin

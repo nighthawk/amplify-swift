@@ -63,10 +63,10 @@ class AuthCategoryConfigurationTests: XCTestCase {
     ///
     func testCanResetCategory() async throws {
         let plugin = MockAuthCategoryPlugin()
-        let resetWasInvoked = expectation(description: "reset() was invoked")
+        var resetWasInvoked = false
         plugin.listeners.append { message in
             if message == "reset" {
-                resetWasInvoked.fulfill()
+                resetWasInvoked = true
             }
         }
         try Amplify.add(plugin: plugin)
@@ -79,7 +79,8 @@ class AuthCategoryConfigurationTests: XCTestCase {
 
         try Amplify.configure(amplifyConfig)
         await Amplify.reset()
-        await waitForExpectations(timeout: 1.0)
+
+        XCTAssertTrue(resetWasInvoked)
     }
 
     /// Test whether calling reset removes the plugin added
@@ -179,11 +180,10 @@ class AuthCategoryConfigurationTests: XCTestCase {
         try Amplify.add(plugin: defaultPlugin)
 
         let anotherPlugin = MockSecondAuthCategoryPlugin()
-        let methodShouldBeInvokedOnSecondPlugin =
-            expectation(description: "test method should be invoked on second plugin")
+        var methodShouldBeInvokedOnSecondPlugin = false
         anotherPlugin.listeners.append { message in
             if message == "changePassword" {
-                methodShouldBeInvokedOnSecondPlugin.fulfill()
+                methodShouldBeInvokedOnSecondPlugin = true
             }
         }
         try Amplify.add(plugin: anotherPlugin)
@@ -200,7 +200,8 @@ class AuthCategoryConfigurationTests: XCTestCase {
         try Amplify.configure(amplifyConfig)
         _ = try await Amplify.Auth.getPlugin(for: "MockSecondAuthCategoryPlugin")
             .update(oldPassword: "current", to: "new", options: nil)
-        await waitForExpectations(timeout: 1.0)
+
+        XCTAssertTrue(methodShouldBeInvokedOnSecondPlugin)
     }
 
     /// Test if we get error when trying default plugin when multiple plugin added.

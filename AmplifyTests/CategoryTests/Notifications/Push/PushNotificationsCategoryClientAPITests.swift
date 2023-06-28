@@ -36,58 +36,58 @@ class PushNotificationsCategoryClientAPITests: XCTestCase {
 
     func testIdentifyUser_shouldSucceed() async throws {
         let expectedMessage = "identifyUser(userId:test)"
-        let methodInvoked = expectation(description: "Expected method was invoked on plugin")
+        var methodInvoked = false
         plugin.listeners.append { message in
             if message == expectedMessage {
-                methodInvoked.fulfill()
+                methodInvoked = true
             }
         }
 
         try await category.identifyUser(userId: "test")
-        await waitForExpectations(timeout: 1.0)
+        XCTAssertTrue(methodInvoked)
     }
 
     func testRegisterDeviceToken_shouldSucceed() async throws {
         let data = "Data".data(using: .utf8)!
         let expectedMessage = "registerDevice(token:\(data))"
-        let methodInvoked = expectation(description: "Expected method was invoked on plugin")
+        var methodInvoked = false
         plugin.listeners.append { message in
             if message == expectedMessage {
-                methodInvoked.fulfill()
+                methodInvoked = true
             }
         }
 
         try await category.registerDevice(apnsToken: data)
-        await waitForExpectations(timeout: 1.0)
+        XCTAssertTrue(methodInvoked)
     }
 
     func testRecordNotificationReceived_shouldSucceed() async throws {
         let userInfo: Notifications.Push.UserInfo = ["test": "test"]
         let expectedMessage = "recordNotificationReceived(userInfo:\(userInfo))"
-        let methodInvoked = expectation(description: "Expected method was invoked on plugin")
+        var methodInvoked = false
         plugin.listeners.append { message in
             if message == expectedMessage {
-                methodInvoked.fulfill()
+                methodInvoked = true
             }
         }
 
         try await category.recordNotificationReceived(userInfo)
-        await waitForExpectations(timeout: 1.0)
+        XCTAssertTrue(methodInvoked)
     }
 
 #if !os(tvOS)
     func testRecordNotificationOpened_shouldSucceed() async throws {
         let response = UNNotificationResponse(coder: MockedKeyedArchiver(requiringSecureCoding: false))!
         let expectedMessage = "recordNotificationOpened(response:\(response))"
-        let methodInvoked = expectation(description: "Expected method was invoked on plugin")
+        var methodInvoked = false
         plugin.listeners.append { message in
             if message == expectedMessage {
-                methodInvoked.fulfill()
+                methodInvoked = true
             }
         }
 
         try await category.recordNotificationOpened(response)
-        await waitForExpectations(timeout: 1.0)
+        XCTAssertTrue(methodInvoked)
     }
 #endif
 

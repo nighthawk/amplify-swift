@@ -50,7 +50,7 @@ class ClearCredentialsTests: XCTestCase {
         await action.execute(withDispatcher: MockDispatcher { _ in },
                         environment: environment)
 
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation], timeout: 0.1)
     }
 
     /// Test is responsible to check if configuration error is correctly caught by the action
@@ -82,7 +82,7 @@ class ClearCredentialsTests: XCTestCase {
             }
         }, environment: environment)
 
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation], timeout: 0.1)
     }
 
     /// Test is responsible to check if the clear credentials handle a known error
@@ -136,7 +136,7 @@ class ClearCredentialsTests: XCTestCase {
             }
         }, environment: environment)
 
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation], timeout: 0.1)
     }
 
     /// Test is responsible to check if the clear credentials handle an unknown error
@@ -191,7 +191,7 @@ class ClearCredentialsTests: XCTestCase {
             }
         }, environment: environment)
 
-        await waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation], timeout: 0.1)
     }
 
 }

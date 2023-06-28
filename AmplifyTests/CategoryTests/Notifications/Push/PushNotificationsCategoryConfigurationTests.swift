@@ -123,24 +123,24 @@ class PushNotificationsCategoryConfigurationTests: XCTestCase {
         try Amplify.configure(createAmplifyConfig())
 
         await Amplify.reset()
-        await waitForExpectations(timeout: 1.0)
+        await fulfillment(of: [resetWasInvoked], timeout: 1.0)
     }
 
     // MARK: - Category tests
 
     func testUsingCategory_withConfiguredPlugin_shouldSucceed() async throws {
         let plugin = MockPushNotificationsCategoryPlugin()
-        let methodInvokedOnDefaultPlugin = expectation(description: "test method invoked on default plugin")
+        var methodInvokedOnDefaultPlugin = false
         plugin.listeners.append { message in
             if message == "identifyUser(userId:test)" {
-                methodInvokedOnDefaultPlugin.fulfill()
+                methodInvokedOnDefaultPlugin = true
             }
         }
         try Amplify.add(plugin: plugin)
         try Amplify.configure(createAmplifyConfig())
 
         try await Amplify.Notifications.Push.identifyUser(userId: "test")
-        await waitForExpectations(timeout: 1.0)
+        XCTAssertTrue(methodInvokedOnDefaultPlugin)
     }
 
     func testUsingCategory_withMultiplePlugins_shouldThrowFatalError() async throws {
@@ -211,30 +211,28 @@ class PushNotificationsCategoryConfigurationTests: XCTestCase {
     
     func testUsingPlugin_withMultiplePlugins_shouldSucceed() async throws {
         let plugin1 = MockPushNotificationsCategoryPlugin()
-        let methodShouldNotBeInvokedOnDefaultPlugin =
-        expectation(description: "test method should not be invoked on default plugin")
-        methodShouldNotBeInvokedOnDefaultPlugin.isInverted = true
+        var methodShouldNotBeInvokedOnDefaultPlugin = false
         plugin1.listeners.append { message in
             if message == "identifyUser(userId:test)" {
-                methodShouldNotBeInvokedOnDefaultPlugin.fulfill()
+                methodShouldNotBeInvokedOnDefaultPlugin = true
             }
         }
         try Amplify.add(plugin: plugin1)
         
         let plugin2 = MockSecondPushNotificationsCategoryPlugin()
-        let methodShouldBeInvokedOnSecondPlugin =
-        expectation(description: "test method should be invoked on second plugin")
+        var methodShouldBeInvokedOnSecondPlugin = false
         plugin2.listeners.append { message in
             if message == "identifyUser(userId:test)" {
-                methodShouldBeInvokedOnSecondPlugin.fulfill()
+                methodShouldBeInvokedOnSecondPlugin = true
             }
         }
         try Amplify.add(plugin: plugin2)
-
         try Amplify.configure(createAmplifyConfig(hasSecondPlugin: true))
 
         try await Amplify.Notifications.Push.getPlugin(for: "MockSecondPushNotificationsCategoryPlugin").identifyUser(userId: "test", userProfile: nil)
-        await waitForExpectations(timeout: 1.0)
+
+        XCTAssertTrue(methodShouldBeInvokedOnSecondPlugin)
+        XCTAssertFalse(methodShouldNotBeInvokedOnDefaultPlugin)
     }
 
     func testUsingPlugin_callingConfigure_shouldSucceed() throws {
