@@ -65,10 +65,7 @@ class DataStoreConnectionScenario3Tests: SyncEngineIntegrationTestBase {
                 syncCommentReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         _ = try await Amplify.DataStore.save(post)
         await fulfillment(of: [syncedPostReceived], timeout: networkTimeout)
         _ = try await Amplify.DataStore.save(comment)

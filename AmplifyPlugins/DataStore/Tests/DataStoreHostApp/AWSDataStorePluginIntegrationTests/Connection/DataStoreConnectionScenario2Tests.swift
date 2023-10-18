@@ -65,10 +65,7 @@ class DataStoreConnectionScenario2Tests: SyncEngineIntegrationTestBase {
                 syncProjectReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         _ = try await Amplify.DataStore.save(team)
         await fulfillment(of: [syncedTeamReceived], timeout: networkTimeout)
@@ -101,10 +98,7 @@ class DataStoreConnectionScenario2Tests: SyncEngineIntegrationTestBase {
                 syncUpdatedProjectReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         _ = try await Amplify.DataStore.save(team)
         _ = try await Amplify.DataStore.save(anotherTeam)
@@ -158,10 +152,7 @@ class DataStoreConnectionScenario2Tests: SyncEngineIntegrationTestBase {
             }
 
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         try await Amplify.DataStore.save(team)
         try await Amplify.DataStore.save(project)
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)

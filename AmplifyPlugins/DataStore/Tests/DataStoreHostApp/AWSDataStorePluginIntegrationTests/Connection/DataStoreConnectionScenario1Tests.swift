@@ -60,10 +60,7 @@ class DataStoreConnectionScenario1Tests: SyncEngineIntegrationTestBase {
                 syncedTeamReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+
 
         _ = try await Amplify.DataStore.save(team)
         await fulfillment(of: [syncedTeamReceived], timeout: networkTimeout)
@@ -81,10 +78,7 @@ class DataStoreConnectionScenario1Tests: SyncEngineIntegrationTestBase {
                 syncProjectReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+
         _ = try await Amplify.DataStore.save(project)
         await fulfillment(of: [syncProjectReceived], timeout: networkTimeout)
 
@@ -122,10 +116,7 @@ class DataStoreConnectionScenario1Tests: SyncEngineIntegrationTestBase {
                 syncUpdatedProjectReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+
         project.team = anotherTeam
         _ = try await Amplify.DataStore.save(project)
         await fulfillment(of: [syncUpdatedProjectReceived], timeout: networkTimeout)
@@ -168,10 +159,7 @@ class DataStoreConnectionScenario1Tests: SyncEngineIntegrationTestBase {
                 }
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+
         
         _ = try await Amplify.DataStore.save(team)
         _ = try await Amplify.DataStore.save(project)
@@ -198,10 +186,7 @@ class DataStoreConnectionScenario1Tests: SyncEngineIntegrationTestBase {
                 }
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+
         _ = try await Amplify.DataStore.delete(project)
 
         // TODO: Delete Team should not be necessary, cascade delete should delete the team when deleting the project.

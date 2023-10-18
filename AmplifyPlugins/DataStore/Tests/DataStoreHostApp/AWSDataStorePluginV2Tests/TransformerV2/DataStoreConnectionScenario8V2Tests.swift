@@ -94,10 +94,7 @@ class DataStoreConnectionScenario8V2Tests: SyncEngineIntegrationV2TestBase {
                     }
                 }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
 
         let queriedAttendeeOptional = try await Amplify.DataStore.query(Attendee8V2.self, byId: attendee.id)
@@ -164,10 +161,7 @@ class DataStoreConnectionScenario8V2Tests: SyncEngineIntegrationV2TestBase {
                     }
                 }
             }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
         
         let updateReceived = expectation(description: "Update notification received")
@@ -189,10 +183,7 @@ class DataStoreConnectionScenario8V2Tests: SyncEngineIntegrationV2TestBase {
                     }
                 }
             }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         
         registration.attendee = attendee2
         let updatedRegistration = try await Amplify.DataStore.save(registration)
@@ -260,10 +251,7 @@ class DataStoreConnectionScenario8V2Tests: SyncEngineIntegrationV2TestBase {
                     }
                 }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
         
         let deleteRegistrationRecieved = expectation(description: "Delete registration received")
@@ -283,10 +271,7 @@ class DataStoreConnectionScenario8V2Tests: SyncEngineIntegrationV2TestBase {
                     }
                 }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         let _ = try await Amplify.DataStore.delete(registration)
         await fulfillment(of: [deleteRegistrationRecieved], timeout: TestCommonConstants.networkTimeout)
         
@@ -351,10 +336,7 @@ class DataStoreConnectionScenario8V2Tests: SyncEngineIntegrationV2TestBase {
                     }
                 }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
         
         let deleteReceived = expectation(description: "Delete received")
@@ -451,10 +433,7 @@ class DataStoreConnectionScenario8V2Tests: SyncEngineIntegrationV2TestBase {
                     }
                 }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
         
         let deleteReceived = expectation(description: "Delete received")

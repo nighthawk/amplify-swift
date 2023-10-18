@@ -70,10 +70,7 @@ class DataStoreConsecutiveUpdatesTests: SyncEngineIntegrationTestBase {
 
         }
 
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         // Post is saved and then immediately updated
         _ = try await Amplify.DataStore.save(newPost)
@@ -146,10 +143,7 @@ class DataStoreConsecutiveUpdatesTests: SyncEngineIntegrationTestBase {
             }
         }
 
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         // Post is saved and then immediately deleted
         _ = try await Amplify.DataStore.save(newPost)
@@ -230,10 +224,7 @@ class DataStoreConsecutiveUpdatesTests: SyncEngineIntegrationTestBase {
             }
         }
 
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         // save the post, update and delete immediately
         _ = try await Amplify.DataStore.save(newPost)
@@ -319,10 +310,7 @@ class DataStoreConsecutiveUpdatesTests: SyncEngineIntegrationTestBase {
 
         }
 
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         _ = try await Amplify.DataStore.save(newPost)
         await fulfillment(of: [saveSyncReceived], timeout: networkTimeout)

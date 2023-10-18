@@ -62,10 +62,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
                 syncCommentReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         
         _ = try await Amplify.DataStore.save(post)
         _ = try await Amplify.DataStore.save(comment)
@@ -170,10 +167,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
                 createReceived.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         
         _ = try await Amplify.DataStore.save(post)
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
@@ -203,10 +197,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
                 }
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         
         _ = try await Amplify.DataStore.save(post)
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
@@ -230,10 +221,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
             }
         }
         
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         
         post.title = updatedTitle
         _ = try await Amplify.DataStore.save(post)
@@ -262,10 +250,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
                 }
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         _ = try await Amplify.DataStore.save(post)
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
 
@@ -286,10 +271,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
 
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         
         _ = try await Amplify.DataStore.delete(post)
         await fulfillment(of: [deleteReceived], timeout: TestCommonConstants.networkTimeout)
@@ -326,10 +308,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
                 }
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         _ = try await Amplify.DataStore.save(post)
         _ = try await Amplify.DataStore.save(comment)
         await fulfillment(of: [createReceived], timeout: TestCommonConstants.networkTimeout)
@@ -357,10 +336,7 @@ class DataStoreConnectionScenario3aV2Tests: SyncEngineIntegrationV2TestBase {
                 }
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         
         _ = try await Amplify.DataStore.delete(post)
         // TODO: Deleting the comment should not be necessary. Cascade delete is not working

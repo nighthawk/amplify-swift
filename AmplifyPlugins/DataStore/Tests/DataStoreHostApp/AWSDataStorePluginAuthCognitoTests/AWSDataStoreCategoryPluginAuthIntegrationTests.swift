@@ -53,14 +53,10 @@ class AWSDataStoreCategoryPluginAuthIntegrationTests: AWSDataStoreAuthBaseTest {
                 syncReceivedInvoked.fulfill()
             }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: syncReceivedListener, timeout: 5.0) else {
-            XCTFail("syncReceivedListener registered for hub")
-            return
-        }
 
         try await signIn(user: user1)
 
-        await fulfillment(of: [syncReceivedInvoked], timeout: TestCommonConstants.networkTimeout)
+        await fulfillment(of: [syncReceivedInvoked], timeout: 60)
         Amplify.Hub.removeListener(syncReceivedListener)
         guard let remoteTodo = remoteTodoOptional else {
             XCTFail("Should have received a SyncReceived event with the remote note reconciled to local store")

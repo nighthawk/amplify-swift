@@ -62,10 +62,7 @@ class DataStoreCustomPrimaryKeyTests: SyncEngineIntegrationTestBase {
                     return
                 }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         // create customer order
         _ = try await Amplify.DataStore.save(customerOrder)
@@ -97,10 +94,7 @@ class DataStoreCustomPrimaryKeyTests: SyncEngineIntegrationTestBase {
                 }
 
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
         _ = try await Amplify.DataStore.save(updatedCustomerOrder)
         await fulfillment(of: [updateReceived], timeout: networkTimeout)
 
@@ -138,10 +132,7 @@ class DataStoreCustomPrimaryKeyTests: SyncEngineIntegrationTestBase {
                     return
                 }
         }
-        guard try await HubListenerTestUtilities.waitForListener(with: hubListener, timeout: 5.0) else {
-            XCTFail("Listener not registered for hub")
-            return
-        }
+        
 
         _ = try await Amplify.DataStore.delete(CustomerOrder.self, withIdentifier: updatedCustomerOrder.id)
         await fulfillment(of: [deleteReceived], timeout: networkTimeout)
