@@ -164,7 +164,7 @@ class AuthHubEventHandlerTests: XCTestCase {
         await waitForExpectations(timeout: networkTimeout)
     }
 
-#if !os(xrOS)
+#if !os(visionOS)
 #if os(iOS) || os(macOS)
     /// Test whether HubEvent emits a mocked signedIn event for webUI signIn
     ///
