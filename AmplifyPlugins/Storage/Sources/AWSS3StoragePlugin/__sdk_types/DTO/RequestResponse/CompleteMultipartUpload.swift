@@ -55,6 +55,13 @@ struct CompleteMultipartUploadInput: Equatable, Encodable {
     enum CodingKeys: String, CodingKey {
         case multipartUpload = "CompleteMultipartUpload"
     }
+
+//    var xml: Data {
+//        Data("""
+//        
+//
+//        """.utf8)
+//    }
 }
 
 struct CompleteMultipartUploadOutputResponse: Equatable, Decodable {

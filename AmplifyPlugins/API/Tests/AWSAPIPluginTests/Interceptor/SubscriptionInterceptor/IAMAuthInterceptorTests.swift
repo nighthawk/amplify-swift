@@ -93,22 +93,23 @@ class IAMAuthInterceptorTests: XCTestCase {
         XCTAssertEqual(jsonObject.count, 8)
     }
 
-    func testInterceptConnection() async {
-        let mockAuthService = MockAWSAuthService()
-        let interceptor = IAMAuthInterceptor(mockAuthService.getCredentialsProvider(), region: "us-west-2")
-        let url = URL(string: "https://abc.appsync-api.us-west-2.amazonaws.com/graphql")!
-        let signer = MockAWSSignatureV4Signer()
-        guard let authHeader = await interceptor.getAuthHeader(url, with: "payload", signer: signer) else {
-            XCTFail("Could not get authHeader")
-            return
-        }
-
-        XCTAssertNotNil(authHeader.authorization)
-        XCTAssertNotNil(authHeader.securityToken)
-        XCTAssertNotNil(authHeader.amzDate)
-        XCTAssertEqual(authHeader.accept, "application/json, text/javascript")
-        XCTAssertEqual(authHeader.contentEncoding, "amz-1.0")
-        XCTAssertEqual(authHeader.contentType, "application/json; charset=UTF-8")
-        XCTAssertNil(authHeader.additionalHeaders)
-    }
+    // TODO: add back with SigV4Signer
+//    func testInterceptConnection() async {
+//        let mockAuthService = MockAWSAuthService()
+//        let interceptor = IAMAuthInterceptor(mockAuthService.getCredentialsProvider(), region: "us-west-2")
+//        let url = URL(string: "https://abc.appsync-api.us-west-2.amazonaws.com/graphql")!
+//        let signer = MockAWSSignatureV4Signer()
+//        guard let authHeader = await interceptor.getAuthHeader(url, with: "payload", signer: signer) else {
+//            XCTFail("Could not get authHeader")
+//            return
+//        }
+//
+//        XCTAssertNotNil(authHeader.authorization)
+//        XCTAssertNotNil(authHeader.securityToken)
+//        XCTAssertNotNil(authHeader.amzDate)
+//        XCTAssertEqual(authHeader.accept, "application/json, text/javascript")
+//        XCTAssertEqual(authHeader.contentEncoding, "amz-1.0")
+//        XCTAssertEqual(authHeader.contentType, "application/json; charset=UTF-8")
+//        XCTAssertNil(authHeader.additionalHeaders)
+//    }
 }

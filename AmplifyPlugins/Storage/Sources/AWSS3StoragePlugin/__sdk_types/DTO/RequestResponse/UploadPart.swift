@@ -6,11 +6,53 @@
 //
 
 import Foundation
-
+import AWSPluginsCore
 
 extension UploadPartInput {
     func presignURL(config: S3ClientConfiguration, expiration: Double) async throws -> URL {
-        fatalError()
+        let credentialsProvider = config.credentialsProvider
+        let credentials = try await credentialsProvider.fetchCredentials()
+
+        let signer = SigV4Signer(
+            credentials: credentials,
+            serviceName: "s3",
+            region: config.region
+        )
+
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "\(bucket).s3.\(config.region).amazonaws.com"
+        components.path = "/\(key)"
+        let queryItems: [URLQueryItem] = [
+            .init(
+                name: "partNumber",
+                value: String(partNumber)
+            ),
+            .init(
+                name: "uploadId",
+                value: uploadId
+            )
+        ] 
+        + headers
+            .filter { $0.key.starts(with: "x-amz-meta-") }
+            .map { .init(name: $0.key, value: $0.value) }
+
+
+        components.queryItems = queryItems
+
+        guard let url = components.url else {
+            throw PlaceholderError()
+        }
+
+        // TODO: Add user agent header
+        let presignedURL = signer.presign(
+            url: url,
+            method: .put,
+            headers: headers,
+            expires: Int(expiration)
+        )
+
+        return presignedURL
     }
 }
 
@@ -95,6 +137,8 @@ struct UploadPartOutputResponse: Equatable {
     var sseCustomerAlgorithm: String?
     var sseCustomerKeyMD5: String?
     var ssekmsKeyId: String?
+
+
 }
 
 extension UploadPartOutputResponse: HeadersApplying {

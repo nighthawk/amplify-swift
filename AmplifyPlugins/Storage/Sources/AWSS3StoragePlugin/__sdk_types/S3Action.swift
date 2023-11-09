@@ -147,11 +147,20 @@ extension Action where Input == CreateMultipartUploadInput, Output == CreateMult
             hostPrefix: "\(input.bucket).",
             method: .post,
             mapError: mapError(data:response:),
-            encode: { _, _ in Data() }
-//            decode: { _, response, headers in
-//                let output = CreateMultipartUploadOutputResponse()
-//                return output.applying(headers: headers)
-//            }
+            encode: { _, _ in Data() },
+            decode: { data, response, headers in
+                let output = CreateMultipartUploadOutputResponse()
+                let decoder = XMLDecoder(
+                    decodeMap: [
+                        "Bucket": (.pending, \.bucket),
+                        "Key": (.pending, \.key),
+                        "UploadId": (.pending, \.uploadId),
+                    ],
+                    model: output
+                )
+                let decoded = try decoder.decode(data: data)
+                return decoded.applying(headers: headers)
+            }
         )
     }
 }

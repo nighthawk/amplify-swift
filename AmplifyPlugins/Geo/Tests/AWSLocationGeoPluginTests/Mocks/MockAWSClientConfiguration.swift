@@ -5,9 +5,6 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import AWSClientRuntime
-import ClientRuntime
-import AWSLocation
 import Foundation
 import XCTest
 
@@ -28,11 +25,11 @@ extension LocationClient.LocationClientConfiguration {
     }
 }
 
-class MockEndPointResolver: EndpointResolver {
-    func resolve(params: AWSLocation.EndpointParams) throws -> ClientRuntime.Endpoint {
-        return Endpoint(host: "MockHost")
-    }
-}
+//class MockEndPointResolver: EndpointResolver {
+//    func resolve(params: AWSLocation.EndpointParams) throws -> ClientRuntime.Endpoint {
+//        return Endpoint(host: "MockHost")
+//    }
+//}
 
 class MockLogAgent: LogAgent {
     var name: String = ""

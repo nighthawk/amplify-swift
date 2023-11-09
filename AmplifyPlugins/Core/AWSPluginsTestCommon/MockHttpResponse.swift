@@ -5,10 +5,15 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-import ClientRuntime
+import Foundation
 
 class MockHttpResponse {
-    class var ok: HttpResponse {
-        HttpResponse(body: .none, statusCode: .ok)
+    class var ok: HTTPURLResponse {
+        .init(
+            url: .init(string: "amplify.aws.com")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil
+        )!
     }
 }
