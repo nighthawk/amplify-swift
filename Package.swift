@@ -441,9 +441,9 @@ let targets: [Target] = amplifyTargets
     + dataStoreTargets
     + storageTargets
     + geoTargets
-    + analyticsTargets
-    + pushNotificationsTargets
-    + internalPinpointTargets
+//    + analyticsTargets
+//    + pushNotificationsTargets
+//    + internalPinpointTargets
     + predictionsTargets
     + loggingTargets
 
@@ -479,14 +479,14 @@ let package = Package(
             name: "AWSLocationGeoPlugin",
             targets: ["AWSLocationGeoPlugin"]
         ),
-        .library(
-            name: "AWSPinpointAnalyticsPlugin",
-            targets: ["AWSPinpointAnalyticsPlugin"]
-        ),
-        .library(
-            name: "AWSPinpointPushNotificationsPlugin",
-            targets: ["AWSPinpointPushNotificationsPlugin"]
-        ),
+//        .library(
+//            name: "AWSPinpointAnalyticsPlugin",
+//            targets: ["AWSPinpointAnalyticsPlugin"]
+//        ),
+//        .library(
+//            name: "AWSPinpointPushNotificationsPlugin",
+//            targets: ["AWSPinpointPushNotificationsPlugin"]
+//        ),
         .library(
             name: "AWSPredictionsPlugin",
             targets: ["AWSPredictionsPlugin"]
